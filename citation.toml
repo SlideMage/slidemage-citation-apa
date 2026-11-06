@@ -1,0 +1,9 @@
+# The SlideMage citation format package "apa" (docs/CITATION_PACKAGE.md in SlideMage).
+id = "apa"
+name = "APA 7"
+version = "1.0.0"
+requires_slidemage = ">=0.13.0"
+summary = "Author-year citations and a reference list after APA 7 (7th edition), through biblatex-apa."
+author = "Stefan Palan"
+homepage = "https://github.com/SlideMage/slidemage-citation-apa"
+license = "LPPL-1.3c-or-later"

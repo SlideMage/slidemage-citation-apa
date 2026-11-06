@@ -1,0 +1,42 @@
+% SPDX-FileCopyrightText: 2026 Stefan Palan
+% SPDX-License-Identifier: LPPL-1.3c+
+% SlideMage citation format "apa": APA 7 (American Psychological Association, 7th edition) author-date
+% citations and reference list, through the biblatex-apa style (style=apa, which implements APA 7).
+%
+% Choose it in a template (between \input{SlideMage_setup} and \input{SlideMage_base}) or in a deck (before
+% \SMUseBibliography):
+%     \renewcommand{\SMCitationFormat}{apa}
+%
+% biblatex-apa asks for a language mapping to its own "-apa" language files; the common English variants are
+% mapped here and other languages are left to biblatex-apa's defaults.
+\makeatletter
+% Beamer patches biblatex's bibliography so that its first block gets the font and colour "bibliography entry
+% author", the second "title" (bold in the SlideMage theme) and the third and fourth "location" and "note"
+% (grey). APA's blocks are not author/title/note, so those looks land on the wrong parts. All four are set to
+% the author's look, so the reference list reads as one APA paragraph; the italics APA wants come from
+% biblatex-apa itself. All four are body size; a \fullcite in a footnote
+% shrinks them again through SlideMage's footnote template.
+\newcommand{\SM@apaBibLook}[1]{%
+	\setbeamercolor*{bibliography entry #1}{parent=bibliography entry author}%
+	\setbeamerfont{bibliography entry #1}{series=\mdseries, shape=\upshape, size=\normalsize}}
+\newcommand{\SMapaIconRoom}{%
+	\settowidth\beamer@bibiconwidth{\usebeamertemplate*{bibliography item}}%
+	\setlength{\labelwidth}{-\beamer@bibiconwidth}%
+	\addtolength{\labelwidth}{2\labelsep}%
+	\addtolength{\bibhang}{\labelsep}}
+\newcommand{\SMapaBibLooksHook}{%
+	\setbeamerfont{bibliography entry author}{series=\mdseries, shape=\upshape, size=\normalsize}%
+	\SM@apaBibLook{title}\SM@apaBibLook{location}\SM@apaBibLook{note}}
+\makeatother
+\renewcommand{\SMBiblatexOptions}{style=apa, backend=biber, uniquename=false}
+\renewcommand{\SMBibliographyStyle}{%
+	\DeclareLanguageMapping{american}{american-apa}%
+	\DeclareLanguageMapping{english}{english-apa}%
+	\DeclareLanguageMapping{british}{british-apa}%
+	% Beamer fits its item icon into the bibliography list only for authoryear and authortitle (it patches
+	% those two styles' \bibsetup); the same code is applied here, so the icon does not hang over the slide's
+	% edge. The hanging indent is 1.5em plus the icon's room.
+	\setlength{\bibhang}{1.5em}% (APA's half inch is a lot on a slide)
+	\pretocmd{\bibsetup}{\SMapaIconRoom}{}{}%
+	\AtBeginDocument{\SMapaBibLooksHook}%
+}
